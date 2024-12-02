@@ -59,7 +59,39 @@ def read_words_from_file(file_name):
         print("Error:", e)
 
 def play_game(words):
-    print(words)
+    print("Picking a word.....please wait a moment")
+    
+    chosen_word = random.sample(words, 1)
+    chosen_word = chosen_word[0]
+    print(chosen_word)
+    num_of_guesses_left = 6
+    guessed_letters = []
+
+    print(f"> Guess either the letters in this {len(chosen_word)} letter word or the word itself (you have 6 letter guesses):")
+    
+    guess = str(input(">   ")).lower()
+    
+    while (num_of_guesses_left > 0):
+        if len(guess) == 1:
+            if guess in chosen_word:
+                print(f"'{guess}' is in {chosen_word}!")
+                position = chosen_word.index(guess)
+                print(f"Position of letter: {position}")
+                num_of_guesses_left -= 1
+            else:
+                num_of_guesses_left -= 1
+                print(f"Guess is wrong. {num_of_guesses_left} remaining")
+        elif len(guess) >= 2:
+            if guess in chosen_word:
+                print("Hurray!! You've guessed the word!")
+                num_of_guesses_left -= 1
+            else:
+                print(f"Sorry, the phrase '{guess}' is not in the word")
+                num_of_guesses_left -= 1
+
+    if len(guessed_letters) == len(chosen_word):
+        #todo
+        pass
 
 def create_lists(words_list):
     a = []
