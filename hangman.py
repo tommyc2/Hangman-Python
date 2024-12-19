@@ -6,6 +6,8 @@
 
 import random
 import sys
+import threading
+import tkinter
 
 easy_words_list = []
 normal_words_list = []
@@ -34,8 +36,9 @@ def main():
     print("-------------------")
 
     print("\nChoose your difficulty level:\n")
+    print("1. Easy\n2. Normal\n3. Difficult\n\n")
 
-    difficulty = int(input("1. Easy\n2. Normal\n3. Difficult\n\nEnter your choice -->     "))
+    difficulty = validate_input()
 
     if difficulty == 1:
         print("\nYou chose the Easy difficulty.")
@@ -46,6 +49,8 @@ def main():
     elif difficulty == 3:
         print("\nYou chose the Difficult difficulty.")
         play_game(difficult_words_list)
+
+
 
 def read_words_from_file(file_name):
     list_of_words_to_return = []
@@ -141,6 +146,22 @@ def create_lists(words_list):
 
     
 def validate_input():
-    pass
+    while True:
+        user_choice = int(input("> Enter an option above (1-3):    "))
 
-main()
+        if (user_choice >= 1) and (user_choice <= 3):
+            return int(user_choice) # e.g the number
+        else:
+            print("The number must be between 1-3. Please try again.")
+
+def setup_tkinter():
+    window = tkinter.Tk()
+    window.title("Hangman Game")
+    window.geometry("500x500")
+    window.mainloop()
+
+if __name__ == "__main__":
+    main_thread = threading.Thread(target=main, daemon=True)
+    main_thread.start()
+
+    setup_tkinter()
