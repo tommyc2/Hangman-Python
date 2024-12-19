@@ -8,12 +8,14 @@ import random
 import sys
 import threading
 import tkinter
+import os
 
 easy_words_list = []
 normal_words_list = []
 difficult_words_list = []
-
 words_file = "english-nouns.txt"
+window = None
+image_label = None
 
 def main():
     global easy_words_list
@@ -69,7 +71,7 @@ def play_game(words):
     
     chosen_word = random.sample(words, 1)
     chosen_word = chosen_word[0]
-    num_of_guesses_left = len(chosen_word)
+    num_of_guesses_left = 6
     progress = [] # this is compared with the size of the correct word to check if the user has guessed all the words
 
     print(f"\n{chosen_word}\n") # testing purposes
@@ -88,12 +90,14 @@ def play_game(words):
 
                 if len(progress) == len(chosen_word):
                     print(f"\nYou've guessed all the letters!!\n The word was {str(chosen_word).upper()}")
-                    sys.exit("Exiting program.....Bye")
+                    window.destroy()
 
                 num_of_guesses_left -= 1
+                update_image(num_of_guesses_left)
                 print(f"Remaining Guesses: {num_of_guesses_left}")
             else:
                 num_of_guesses_left -= 1
+                update_image(num_of_guesses_left)
                 print(f"Guess is wrong. You have {num_of_guesses_left} remaining")
         else:
             print("You can only enter 1 letter at a time. Please try again")
@@ -108,10 +112,24 @@ def play_game(words):
             print("Hurray! You've guessed the word right!")
             print(f"The word was in fact '{guessed_word}'")
             word_guessed_is_right = True
+            window.destroy()
         else:
             print("Wrong! Please try again!")
 
-
+def update_image(lives_left):
+    global window
+    global image_label
+    
+    if (lives_left == 1) or (lives_left == 2) or (lives_left == 0):
+        image_path = f"images/{lives_left}.png"
+        new_image = tkinter.PhotoImage(file=image_path)
+        image_label.config(image=new_image)
+        image_label.image = new_image
+    else:
+        image_path = f"images/{lives_left}.png"
+        new_image = tkinter.PhotoImage(file=image_path).zoom(2,2)
+        image_label.config(image=new_image)
+        image_label.image = new_image
 
 def get_letter_occurences(letter, right_word):
     counter = 0
@@ -155,9 +173,16 @@ def validate_input():
             print("The number must be between 1-3. Please try again.")
 
 def setup_tkinter():
+    global window
+    global image_label
+
     window = tkinter.Tk()
-    window.title("Hangman Game")
+    window.title("Tommy's Hangman Game")
     window.geometry("500x500")
+    starter_image = tkinter.PhotoImage(file=f"images/{6}.png").zoom(2,2)
+    image_label = tkinter.Label(window, image=starter_image)
+    image_label.image = starter_image
+    image_label.pack()
     window.mainloop()
 
 if __name__ == "__main__":
