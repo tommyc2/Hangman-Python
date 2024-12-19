@@ -4,6 +4,8 @@
 # 20101841
 # ================================
 
+# Note: For this assignment, both a console app and GUI were created. The app is controlled via the terminal but the user switch between windows to see the changes made to the GUI (e.g. Hangman setup)
+
 import random
 import sys
 import threading
@@ -16,6 +18,11 @@ difficult_words_list = []
 words_file = "english-nouns.txt"
 window = None
 image_label = None
+
+# ================
+# Main function
+# ================
+# -> Executes the starting program
 
 def main():
     global easy_words_list
@@ -52,8 +59,8 @@ def main():
         print("\nYou chose the Difficult difficulty.")
         play_game(difficult_words_list)
 
-
-
+# Reads words from the passed in file
+# Returns list with every word from file
 def read_words_from_file(file_name):
     list_of_words_to_return = []
     try:
@@ -66,6 +73,7 @@ def read_words_from_file(file_name):
     except Exception as e:
         print("Error:", e)
 
+# Initiates the game (GUI + console app)
 def play_game(words):
     print("Picking a word.....please wait a moment")
     
@@ -116,6 +124,8 @@ def play_game(words):
         else:
             print("Wrong! Please try again!")
 
+# Update the image in the image label for tkinter
+# The image will be updated to the appropriate image required
 def update_image(lives_left):
     global window
     global image_label
@@ -138,7 +148,8 @@ def get_letter_occurences(letter, right_word):
             counter += 1
     return counter
         
-
+# Creates 3 separate lists for the game: easy, normal & difficult lists.
+# Returns the 3 lists
 def create_lists(words_list):
     a = []
     b = []
@@ -162,7 +173,8 @@ def create_lists(words_list):
 
     return a, b, c
 
-    
+# Validates the user input.
+# If the user types in a number other than 1,2 or 3, the app will keep telling the user that they must enter a number between 1-3
 def validate_input():
     while True:
         user_choice = int(input("> Enter an option above (1-3):    "))
@@ -172,6 +184,7 @@ def validate_input():
         else:
             print("The number must be between 1-3. Please try again.")
 
+# Sets up the tkinter GUI window in a separate space. The app is controlled via the terminal and the images are displayed via the GUI for the user to see
 def setup_tkinter():
     global window
     global image_label
@@ -185,8 +198,9 @@ def setup_tkinter():
     image_label.pack()
     window.mainloop()
 
+# If the script is directly executes manually, execute this piece of code:
 if __name__ == "__main__":
-    main_thread = threading.Thread(target=main, daemon=True)
+    main_thread = threading.Thread(target=main, daemon=True) # terminal based thread set up.
     main_thread.start()
 
     setup_tkinter()
