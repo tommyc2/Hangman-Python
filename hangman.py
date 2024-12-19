@@ -5,6 +5,7 @@
 # ================================
 
 import random
+import sys
 
 easy_words_list = []
 normal_words_list = []
@@ -63,35 +64,57 @@ def play_game(words):
     
     chosen_word = random.sample(words, 1)
     chosen_word = chosen_word[0]
-    print(chosen_word)
-    num_of_guesses_left = 6
-    guessed_letters = []
+    num_of_guesses_left = len(chosen_word)
+    progress = [] # this is compared with the size of the correct word to check if the user has guessed all the words
 
-    print(f"> Guess either the letters in this {len(chosen_word)} letter word or the word itself (you have 6 letter guesses):")
-    
-    guess = str(input(">   ")).lower()
+    print(f"\n{chosen_word}\n") # testing purposes
+
+    print(f"> Guess the letters in this {len(chosen_word)} letter word. Please enter 1 letter at a time.")
     
     while (num_of_guesses_left > 0):
+
+        guess = str(input(">    ")).lower()
+    
         if len(guess) == 1:
             if guess in chosen_word:
-                print(f"'{guess}' is in {chosen_word}!")
-                position = chosen_word.index(guess)
-                print(f"Position of letter: {position}")
-                num_of_guesses_left -= 1
-            else:
-                num_of_guesses_left -= 1
-                print(f"Guess is wrong. {num_of_guesses_left} remaining")
-        elif len(guess) >= 2:
-            if guess in chosen_word:
-                print("Hurray!! You've guessed the word!")
-                num_of_guesses_left -= 1
-            else:
-                print(f"Sorry, the phrase '{guess}' is not in the word")
-                num_of_guesses_left -= 1
+                print(f"'{guess.upper()}' is in the word!")
+                print(f"This letter occurs {get_letter_occurences(guess,chosen_word)} time(s).")
+                progress.append(get_letter_occurences(guess,chosen_word))
 
-    if len(guessed_letters) == len(chosen_word):
-        #todo
-        pass
+                if len(progress) == len(chosen_word):
+                    print(f"\nYou've guessed all the letters!!\n The word was {str(chosen_word).upper()}")
+                    sys.exit("Exiting program.....Bye")
+
+                num_of_guesses_left -= 1
+                print(f"Remaining Guesses: {num_of_guesses_left}")
+            else:
+                num_of_guesses_left -= 1
+                print(f"Guess is wrong. You have {num_of_guesses_left} remaining")
+        else:
+            print("You can only enter 1 letter at a time. Please try again")
+
+    print("You have run of out of guesses. You now have UNLIMITED attempts at guessing the word!")
+
+    word_guessed_is_right = False
+
+    while (word_guessed_is_right == False):
+        guessed_word = str(input(">   ")).lower()
+        if(guessed_word == chosen_word):
+            print("Hurray! You've guessed the word right!")
+            print(f"The word was in fact '{guessed_word}'")
+            word_guessed_is_right = True
+        else:
+            print("Wrong! Please try again!")
+
+
+
+def get_letter_occurences(letter, right_word):
+    counter = 0
+    for i in range(len(right_word)):
+        if right_word[i] == letter:
+            counter += 1
+    return counter
+        
 
 def create_lists(words_list):
     a = []
