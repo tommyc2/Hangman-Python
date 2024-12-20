@@ -7,10 +7,8 @@
 # Note: For this assignment, both a console app and GUI were created. The app is controlled via the terminal but the user switch between windows to see the changes made to the GUI (e.g. Hangman setup)
 
 import random
-import sys
 import threading
 import tkinter
-import os
 
 easy_words_list = []
 normal_words_list = []
